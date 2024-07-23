@@ -2,7 +2,7 @@ package prompt_test
 
 import (
 	"bytes"
-	"github.com/igenexxx/prompt"
+	"github.com/igenexxx/hello/prompt"
 	"testing"
 )
 
