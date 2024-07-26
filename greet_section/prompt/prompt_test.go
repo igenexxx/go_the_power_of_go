@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func UserInput_HasText(t *testing.T) {
+func TestUserInput_HasText(t *testing.T) {
 	t.Parallel()
 	writeBuf := new(bytes.Buffer)
 	readBuf := new(bytes.Buffer)
