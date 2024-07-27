@@ -79,6 +79,23 @@ func WithOutput(output io.Writer) option {
 	}
 }
 
+func WithInputFromArgs(args []string) option {
+	return func(c *counter) error {
+		if len(args) == 1 {
+			return errors.New("nil args")
+		}
+
+		f, err := os.Open(args[0])
+		if err != nil {
+			return err
+		}
+
+		c.input = f
+
+		return nil
+	}
+}
+
 func Main() {
 	c, err := NewCounter()
 	if err != nil {
