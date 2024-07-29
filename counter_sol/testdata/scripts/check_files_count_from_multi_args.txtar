@@ -1,0 +1,20 @@
+exec counter three_lines.txt four_lines.txt five_lines.txt
+stdout '^14\n$'
+
+-- three_lines.txt --
+one
+two
+three
+
+-- four_lines.txt --
+four
+five
+six
+seven
+
+-- five_lines.txt --
+eight
+nine
+ten
+eleven
+twelve

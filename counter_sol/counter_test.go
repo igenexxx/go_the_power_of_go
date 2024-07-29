@@ -2,8 +2,10 @@ package counter_test
 
 import (
 	"bytes"
-	"github.com/igenexxx/counter/counter"
+	"github.com/igenexxx/counter"
+	"github.com/rogpeppe/go-internal/testscript"
 	"log"
+	"os"
 	"testing"
 )
 
@@ -38,4 +40,39 @@ func TestWithInputFromArgs_SetsInputToGivenPath(t *testing.T) {
 	if want != got {
 		t.Errorf("want %d, got %d", want, got)
 	}
+}
+
+func TestWithInputFromArgs_IgnoresEmptyArgs(t *testing.T) {
+	t.Parallel()
+	inputBuf := bytes.NewBufferString("1\n2\n3")
+	c, err := counter.NewCounter(counter.WithInput(inputBuf), counter.WithInputFromArgs([]string{}))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	want := 3
+	got := c.Lines()
+
+	if want != got {
+		t.Errorf("want %d, got %d", want, got)
+	}
+
+}
+
+func TestMain(m *testing.M) {
+	os.Exit(
+		testscript.RunMain(
+			m,
+			map[string]func() int{
+				"counter": counter.Main,
+			},
+		),
+	)
+}
+
+func Test(t *testing.T) {
+	t.Parallel()
+	testscript.Run(t, testscript.Params{
+		Dir: "testdata/scripts",
+	})
 }

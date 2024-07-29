@@ -11,12 +11,17 @@ import (
 type counter struct {
 	input  io.Reader
 	output io.Writer
+	files  []*os.File
 }
 
-func New() *counter {
-	return &counter{
-		input: os.Stdin,
+func (c *counter) Close() error {
+	for _, file := range c.files {
+		if err := file.Close(); err != nil {
+			return err
+		}
 	}
+
+	return nil
 }
 
 func (c *counter) Lines() int {
@@ -28,16 +33,6 @@ func (c *counter) Lines() int {
 	}
 
 	return lines
-}
-
-func Count() int {
-	c := New()
-	return c.Lines()
-}
-
-func PrintLinesCount() {
-	lines := Count()
-	fmt.Println(lines)
 }
 
 type option func(*counter) error
@@ -81,26 +76,34 @@ func WithOutput(output io.Writer) option {
 
 func WithInputFromArgs(args []string) option {
 	return func(c *counter) error {
-		if len(args) == 1 {
-			return errors.New("nil args")
+		if len(args) == 0 {
+			return nil
 		}
 
-		f, err := os.Open(args[0])
-		if err != nil {
-			return err
+		readers := make([]io.Reader, len(args))
+		for i, filename := range args {
+			f, err := os.Open(filename)
+			if err != nil {
+				return err
+			}
+			c.files = append(c.files, f)
+			readers[i] = f
 		}
 
-		c.input = f
+		c.input = io.MultiReader(readers...)
 
 		return nil
 	}
 }
 
-func Main() {
-	c, err := NewCounter()
+func Main() int {
+	c, err := NewCounter(WithInputFromArgs(os.Args[1:]))
 	if err != nil {
-		panic(err)
+		fmt.Fprintln(os.Stderr, err)
+		return 1
 	}
+	defer c.Close()
 
 	fmt.Println(c.Lines())
+	return 0
 }
