@@ -96,7 +96,7 @@ func WithInputFromArgs(args []string) option {
 	}
 }
 
-func Main() int {
+func MainLines() int {
 	c, err := NewCounter(WithInputFromArgs(os.Args[1:]))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -106,4 +106,28 @@ func Main() int {
 
 	fmt.Println(c.Lines())
 	return 0
+}
+
+func MainWords() int {
+	c, err := NewCounter(WithInputFromArgs(os.Args[1:]))
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return 1
+	}
+	defer c.Close()
+
+	fmt.Println(c.Words())
+	return 0
+}
+
+func (c *counter) Words() int {
+	var words int
+	input := bufio.NewScanner(c.input)
+	input.Split(bufio.ScanWords)
+
+	for input.Scan() {
+		words++
+	}
+
+	return words
 }

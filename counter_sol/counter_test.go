@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func TestCounter_CountShouldBeValid(t *testing.T) {
+func TestLinesCounter_CountShouldBeValid(t *testing.T) {
 	t.Parallel()
 	inputBuf := bytes.NewBufferString("one\ntwo\nthree")
 
@@ -26,7 +26,7 @@ func TestCounter_CountShouldBeValid(t *testing.T) {
 	}
 }
 
-func TestWithInputFromArgs_SetsInputToGivenPath(t *testing.T) {
+func TestLinesCounterWithInputFromArgs_SetsInputToGivenPath(t *testing.T) {
 	t.Parallel()
 	args := []string{"testdata/three_lines.txt"}
 	c, err := counter.NewCounter(counter.WithInputFromArgs(args))
@@ -42,7 +42,7 @@ func TestWithInputFromArgs_SetsInputToGivenPath(t *testing.T) {
 	}
 }
 
-func TestWithInputFromArgs_IgnoresEmptyArgs(t *testing.T) {
+func TestLinesCounterWithInputFromArgs_IgnoresEmptyArgs(t *testing.T) {
 	t.Parallel()
 	inputBuf := bytes.NewBufferString("1\n2\n3")
 	c, err := counter.NewCounter(counter.WithInput(inputBuf), counter.WithInputFromArgs([]string{}))
@@ -64,7 +64,7 @@ func TestMain(m *testing.M) {
 		testscript.RunMain(
 			m,
 			map[string]func() int{
-				"counter": counter.Main,
+				"counter": counter.MainLines,
 			},
 		),
 	)
@@ -75,4 +75,21 @@ func Test(t *testing.T) {
 	testscript.Run(t, testscript.Params{
 		Dir: "testdata/scripts",
 	})
+}
+
+func TestWordsCounter_CountShouldBeValid(t *testing.T) {
+	t.Parallel()
+	inputBuf := bytes.NewBufferString("one line before the second on\nsecond line\nthird line here")
+
+	c, err := counter.NewCounter(counter.WithInput(inputBuf))
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	want := 11
+	got := c.Words()
+
+	if got != want {
+		t.Errorf("want %d, got %d", want, got)
+	}
 }

@@ -6,6 +6,5 @@ import (
 )
 
 func main() {
-	os.Exit(counter.Main())
-
+	os.Exit(counter.MainWords())
 }
