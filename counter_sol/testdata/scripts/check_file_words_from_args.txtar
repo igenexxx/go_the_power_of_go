@@ -1,5 +1,5 @@
-exec lines three_lines.txt
-stdout '^3\n$'
+exec words three_lines.txt
+stdout '^10\n$'
 
 -- three_lines.txt --
 this is the first line

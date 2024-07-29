@@ -1,17 +1,15 @@
-exec lines three_lines.txt four_lines.txt five_lines.txt
-stdout '^14\n$'
+exec words three_lines.txt four_lines.txt five_lines.txt
+stdout '^12\n$'
 
 -- three_lines.txt --
 one
 two
 three
-
 -- four_lines.txt --
 four
 five
 six
 seven
-
 -- five_lines.txt --
 eight
 nine

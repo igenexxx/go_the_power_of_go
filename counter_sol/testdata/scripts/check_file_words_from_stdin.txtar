@@ -1,6 +1,6 @@
 stdin three_lines.txt
-exec lines
-stdout '^3\n$'
+exec words
+stdout '^6\n$'
 
 -- three_lines.txt --
 first line

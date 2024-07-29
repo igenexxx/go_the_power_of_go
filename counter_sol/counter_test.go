@@ -9,6 +9,25 @@ import (
 	"testing"
 )
 
+func Test(t *testing.T) {
+	t.Parallel()
+	testscript.Run(t, testscript.Params{
+		Dir: "testdata/scripts",
+	})
+}
+
+func TestMain(m *testing.M) {
+	os.Exit(
+		testscript.RunMain(
+			m,
+			map[string]func() int{
+				"lines": counter.MainLines,
+				"words": counter.MainWords,
+			},
+		),
+	)
+}
+
 func TestLinesCounter_CountShouldBeValid(t *testing.T) {
 	t.Parallel()
 	inputBuf := bytes.NewBufferString("one\ntwo\nthree")
@@ -57,24 +76,6 @@ func TestLinesCounterWithInputFromArgs_IgnoresEmptyArgs(t *testing.T) {
 		t.Errorf("want %d, got %d", want, got)
 	}
 
-}
-
-func TestMain(m *testing.M) {
-	os.Exit(
-		testscript.RunMain(
-			m,
-			map[string]func() int{
-				"counter": counter.MainLines,
-			},
-		),
-	)
-}
-
-func Test(t *testing.T) {
-	t.Parallel()
-	testscript.Run(t, testscript.Params{
-		Dir: "testdata/scripts",
-	})
 }
 
 func TestWordsCounter_CountShouldBeValid(t *testing.T) {
