@@ -1,5 +1,5 @@
-exec count three_lines.txt
-stdout '^10\n$'
+exec count -bytes three_lines.txt
+stdout '^56\n$'
 
 -- three_lines.txt --
 this is the first line
