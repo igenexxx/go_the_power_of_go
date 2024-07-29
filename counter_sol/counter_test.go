@@ -21,12 +21,23 @@ func TestMain(m *testing.M) {
 		testscript.RunMain(
 			m,
 			map[string]func() int{
-				"lines": counter.MainLines,
-				"words": counter.MainWords,
+				"count": counter.Main,
 			},
 		),
 	)
 }
+
+//func TestMain(m *testing.M) {
+//	os.Exit(
+//		testscript.RunMain(
+//			m,
+//			map[string]func() int{
+//				"lines": counter.MainLines,
+//				"words": counter.MainWords,
+//			},
+//		),
+//	)
+//}
 
 func TestLinesCounter_CountShouldBeValid(t *testing.T) {
 	t.Parallel()
