@@ -2,6 +2,7 @@ package counter_test
 
 import (
 	"bytes"
+	"github.com/google/go-cmp/cmp"
 	"github.com/igenexxx/counter"
 	"github.com/rogpeppe/go-internal/testscript"
 	"log"
@@ -103,5 +104,22 @@ func TestWordsCounter_CountShouldBeValid(t *testing.T) {
 
 	if got != want {
 		t.Errorf("want %d, got %d", want, got)
+	}
+}
+
+func TestWriteToFile_WritesGivenDataToFile(t *testing.T) {
+	t.Parallel()
+	path := "testdata/write_test.txt"
+	want := []byte{1, 2, 3}
+	err := counter.WriteToFile(path, want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !cmp.Equal(want, got) {
+		t.Fatal(cmp.Diff(want, got))
 	}
 }

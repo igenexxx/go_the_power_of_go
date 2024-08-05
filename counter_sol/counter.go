@@ -145,6 +145,10 @@ func (c *counter) Bytes() int {
 	return bytes
 }
 
+func WriteToFile(path string, data []byte) error {
+	return os.WriteFile(path, data, 0o600)
+}
+
 func Main() int {
 	lineMode := flag.Bool("lines", false, "Count lines, not words")
 	bytesMode := flag.Bool("bytes", false, "Count bytes, not words or lines")
