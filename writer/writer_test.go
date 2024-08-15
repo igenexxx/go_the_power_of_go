@@ -74,3 +74,26 @@ func TestWriteToFile_RewriteExistingFile(t *testing.T) {
 		t.Fatal(cmp.Diff(want, got))
 	}
 }
+
+func TestWriteToFile_ChangesPermissionsOnExistingFile(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "perm_test.txt")
+	if err := os.WriteFile(path, []byte("Hello World"), 0644); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := writer.WriteToFile(path, []byte("Hello World")); err != nil {
+		t.Fatal(err)
+	}
+
+	stat, err := os.Stat(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	perm := stat.Mode().Perm()
+	if perm != os.FileMode(0600) {
+		t.Errorf("want file mode 0600, got O%o", perm)
+	}
+}
