@@ -20,5 +20,5 @@ func main() {
 
 	name = strings.TrimSpace(name)
 
-	hello.PrintTo(os.Stdout, name)
+	hello.Main()
 }
